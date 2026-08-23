@@ -1,4 +1,5 @@
 node_modules/
+/build/
 gschemas.compiled
 *.swp
 .DS_Store

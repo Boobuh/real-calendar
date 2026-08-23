@@ -13,16 +13,16 @@ fi
 
 mkdir -p "$DEST"
 cp -a "${SRC}/." "$DEST/"
+rm -f "${DEST}/schemas/gschemas.compiled"
 glib-compile-schemas "${DEST}/schemas"
 
 echo "Installed ${UUID} to ${DEST}"
 echo
-if command -v gnome-extensions >/dev/null 2>&1; then
-    gnome-extensions enable "$UUID" && echo "Enabled ${UUID}." || true
-fi
-
-echo "On Wayland, log out and back in (or reboot) so GNOME Shell reloads extensions."
-echo "On Xorg, press Alt+F2, type r, and press Enter."
+echo "Do not enable it against a live session, and do not restart gnome-shell"
+echo "from a script (killall, gnome-shell --replace). Either one can take the"
+echo "desktop down. Log out and back in first, then:"
+echo
+echo "  gnome-extensions enable ${UUID}"
 echo
 echo "Then open the clock in the top bar. Use Settings → Calendar display to replace"
 echo "the default calendar, or keep the Gregorian / Real toggle (default)."

@@ -135,6 +135,8 @@ export const RealCalendarWidget = GObject.registerClass({
     }
 
     _shiftMonth(delta) {
+        if (this._viewYear === null || this._viewMonth === null)
+            return;
         const next = addMonths(this._viewYear, this._viewMonth, delta);
         this._viewYear = next.year;
         this._viewMonth = next.month;
@@ -151,6 +153,10 @@ export const RealCalendarWidget = GObject.registerClass({
         if (this._viewYear === null || this._viewMonth === null)
             return;
 
+        attempt('redraw the month', () => this._redraw());
+    }
+
+    _redraw() {
         const real = gregorianToReal(this._selected);
         this._heading.text = formatRealHeading(real);
         this._monthLabel.text = MONTHS[this._viewMonth - 1];

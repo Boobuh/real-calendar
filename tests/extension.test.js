@@ -141,6 +141,31 @@ describe('date menu integration', () => {
         assert.equal(t.calendar.visible, true);
     });
 
+    it('does not insert a second copy if enable() is called twice', () => {
+        const t = setUp();
+        t.extension.enable();
+        const afterFirst = t.column.get_children().length;
+
+        t.extension.enable();
+
+        assert.equal(t.column.get_children().length, afterFirst);
+        t.extension.disable();
+        assert.doesNotThrow(() => t.layout.getPreferredWidth());
+    });
+
+    it('swallows a throw from the stock today button', () => {
+        const t = setUp();
+        t.todayButton.setDate = () => {
+            throw new Error('stock boom');
+        };
+
+        assert.doesNotThrow(() => t.extension.enable());
+        assert.doesNotThrow(() => t.todayButton.setDate(new Date()));
+
+        t.extension.disable();
+        assert.doesNotThrow(() => t.layout.getPreferredWidth());
+    });
+
     it('survives a settings change and a menu opening', () => {
         const t = setUp();
         t.extension.enable();

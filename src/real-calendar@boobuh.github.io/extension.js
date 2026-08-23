@@ -10,12 +10,18 @@ import {attempt} from './lib/shellCompat.js';
 
 export default class RealCalendarExtension extends Extension {
     enable() {
+        // A second enable() without disable() would insert another toggle and
+        // calendar into the live date menu.
+        if (this._widget)
+            return;
+
         try {
             this._build();
         } catch (e) {
-            // A half-applied build leaves the date menu broken for the rest of
-            // the session, so undo everything before reporting the failure.
+            // GNOME does not call disable() when enable() throws. Undo first
+            // so the date menu is never left half-modified.
             this._teardown();
+            console.error(`real-calendar: enable failed: ${e}`);
             throw e;
         }
     }
@@ -28,7 +34,7 @@ export default class RealCalendarExtension extends Extension {
         const dateMenu = Main.panel.statusArea?.dateMenu;
         const stockCalendar = dateMenu?._calendar;
         const column = stockCalendar?.get_parent();
-        if (!dateMenu || !stockCalendar || !column) {
+        if (!dateMenu?.menu || !stockCalendar || !column) {
             throw new Error('the GNOME date menu is not laid out the way this ' +
                 'extension expects, so it was left untouched');
         }
@@ -179,9 +185,12 @@ export default class RealCalendarExtension extends Extension {
 
         this._origSetDate = this._todayButton.setDate.bind(this._todayButton);
         this._patchedSetDate = date => {
-            this._origSetDate(date);
-            // GNOME Shell is the caller here, so this must never throw.
-            attempt('relabel the date menu', () => this._applyTodayButton(date));
+            // GNOME Shell is the caller here (clock ticks), so this must
+            // never throw — including the stock setDate we wrapped.
+            attempt('update the date menu', () => {
+                this._origSetDate(date);
+                this._applyTodayButton(date);
+            });
         };
         this._todayButton.setDate = this._patchedSetDate;
     }
@@ -210,7 +219,8 @@ export default class RealCalendarExtension extends Extension {
     }
 
     _applyMode() {
-        if (!this._settings || !this._widget || !this._toggle)
+        if (!this._settings || !this._widget || !this._toggle ||
+            !this._stockCalendar || !this._gregorianBtn || !this._realBtn)
             return;
 
         const replace = this._settings.get_string('calendar-mode') === 'replace';
@@ -232,14 +242,15 @@ export default class RealCalendarExtension extends Extension {
     }
 
     _syncStock(date) {
-        this._stockCalendar.setDate(date);
-        this._todayButton?.setDate(date);
-        if (this._dateMenu._eventsItem)
-            this._dateMenu._eventsItem.setDate(date);
+        this._stockCalendar?.setDate?.(date);
+        this._todayButton?.setDate?.(date);
+        this._dateMenu?._eventsItem?.setDate?.(date);
     }
 
     _applyTodayButton(date) {
         if (!this._settings || !this._todayButton)
+            return;
+        if (!(date instanceof Date) || Number.isNaN(date.getTime()))
             return;
 
         const replace = this._settings.get_string('calendar-mode') === 'replace';

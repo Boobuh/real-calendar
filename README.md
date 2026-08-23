@@ -53,7 +53,11 @@ cd real-calendar
 ./scripts/install.sh
 ```
 
-On Wayland, log out and back in so GNOME Shell reloads extensions. On Xorg, Alt+F2, type `r`, Enter.
+`install.sh` copies the files only. Do **not** enable the extension against a live session, and do **not** restart GNOME Shell from a terminal (`killall gnome-shell`, `gnome-shell --replace`). Log out and back in, then:
+
+```bash
+gnome-extensions enable real-calendar@boobuh.github.io
+```
 
 Then click the clock in the top bar. You should see a **Gregorian | Real** toggle. Open **Extensions → Real Calendar → Settings** to:
 
