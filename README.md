@@ -50,7 +50,14 @@ Tested against GNOME Shell 46 (Ubuntu 24.04). Also declared for 45, 47, 48, and 
 ```bash
 git clone https://github.com/Boobuh/real-calendar.git
 cd real-calendar
-./scripts/install.sh
+make install
+```
+
+Pack a zip for [extensions.gnome.org](https://extensions.gnome.org):
+
+```bash
+make pack
+# → build/real-calendar@boobuh.github.io.shell-extension.zip
 ```
 
 On Wayland, log out and back in so GNOME Shell reloads extensions. On Xorg, Alt+F2, type `r`, Enter.
@@ -60,11 +67,11 @@ Then click the clock in the top bar. You should see a **Gregorian | Real** toggl
 - keep that toggle (**Second option**, default), or
 - **Replace the default calendar**
 
-Uninstall:
-
 ```bash
-./scripts/uninstall.sh
+make uninstall
 ```
+
+`make test`, `make check`, and `make schemas` are the local CI targets. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Demo and CLI (no GNOME required)
 
@@ -84,4 +91,11 @@ src/real-calendar@boobuh.github.io/   GNOME Shell extension
   lib/zodiac.js                       13 signs
 demo/                                 browser preview of the date menu
 bin/real-calendar.js                  print today in Real + zodiac
+data/                                 AppStream metainfo
+po/                                   gettext
 ```
+
+## License
+
+[MIT](LICENSE). Copyright © 2026 Boobuh. SPDX: `MIT` (`REUSE.toml`).
+

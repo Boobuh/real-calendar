@@ -1,0 +1,5 @@
+# Files with translatable strings, relative to the extension source dir.
+# SPDX-License-Identifier: MIT
+extension.js
+prefs.js
+calendarWidget.js
