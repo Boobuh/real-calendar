@@ -1,0 +1,16 @@
+{
+  "name": "real-calendar",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "13-month GNOME/Ubuntu calendar with a 13-sign zodiac including Ophiuchus.",
+  "bin": {
+    "real-calendar": "./bin/real-calendar.js"
+  },
+  "scripts": {
+    "test": "node --test tests/*.test.js",
+    "demo": "python3 -m http.server 8765",
+    "today": "node bin/real-calendar.js"
+  },
+  "license": "MIT"
+}

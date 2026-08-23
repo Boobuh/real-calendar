@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="org.gnome.shell.extensions.real-calendar" path="/org/gnome/shell/extensions/real-calendar/">
+    <key name="calendar-mode" type="s">
+      <choices>
+        <choice value="second"/>
+        <choice value="replace"/>
+      </choices>
+      <default>'second'</default>
+      <summary>How to show the 13-month calendar</summary>
+      <description>Use "second" to keep the GNOME calendar and switch in the date menu. Use "replace" to hide the default calendar.</description>
+    </key>
+    <key name="show-zodiac" type="b">
+      <default>true</default>
+      <summary>Show the 13-sign zodiac</summary>
+    </key>
+  </schema>
+</schemalist>

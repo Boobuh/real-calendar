@@ -1,0 +1,236 @@
+:root {
+  color-scheme: dark;
+  --bg: #1a1a1a;
+  --panel: #2b2b2b;
+  --card: #3a3a3a;
+  --text: #f3f3f3;
+  --muted: #8d8d8d;
+  --accent: #ff7a3d;
+  --radius: 18px;
+  font-family: "Ubuntu", "Cantarell", "Noto Sans", sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(1200px 500px at 20% -10%, #2a2a2a, transparent),
+    var(--bg);
+  color: var(--text);
+}
+
+.shell {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 28px 20px 64px;
+}
+
+.panel {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 18px;
+}
+
+#panel-clock {
+  background: var(--panel);
+  border-radius: 99px;
+  padding: 7px 14px;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+}
+
+.tray {
+  display: grid;
+  grid-template-columns: 92px minmax(280px, 360px);
+  gap: 12px;
+  justify-content: end;
+}
+
+.side {
+  display: grid;
+  gap: 10px;
+}
+
+.media, .slot {
+  background: var(--card);
+  border-radius: 16px;
+  min-height: 64px;
+}
+
+.media {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  color: #fff;
+}
+
+.media button, .pager button, .mode-toggle button, .extras button {
+  background: none;
+  border: 0;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+}
+
+.calendar-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 18px 18px 16px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+}
+
+.mode-toggle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.mode-toggle button {
+  border-radius: 99px;
+  padding: 6px 10px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text);
+}
+
+.mode-toggle button.active {
+  background: var(--accent);
+  color: #111;
+  font-weight: 700;
+}
+
+h1 {
+  margin: 0 0 10px;
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.pager {
+  display: grid;
+  grid-template-columns: 32px 1fr 32px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+#month-label {
+  text-align: center;
+  font-size: 15px;
+}
+
+.weekdays, .grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+}
+
+.weekdays {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.grid button {
+  height: 38px;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  border-radius: 99px;
+  font-variant-numeric: tabular-nums;
+}
+
+.grid button.other {
+  color: #6a6a6a;
+}
+
+.grid button.today,
+.extras button.today {
+  background: var(--accent);
+  color: #111;
+  font-weight: 700;
+}
+
+.grid button.selected:not(.today) {
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.4);
+}
+
+.extras {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.extras button {
+  border-radius: 99px;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.06);
+  text-align: left;
+}
+
+.zodiac {
+  margin: 12px 0 4px;
+  font-size: 15px;
+}
+
+.hint {
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.year-board {
+  margin-top: 36px;
+}
+
+.year-board h2 {
+  margin: 0 0 8px;
+  font-size: 22px;
+}
+
+.lead {
+  color: #cfcfcf;
+  max-width: 52rem;
+}
+
+.signs {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.sign {
+  background: var(--card);
+  border-radius: 14px;
+  padding: 12px 14px;
+}
+
+.sign.active {
+  outline: 2px solid var(--accent);
+}
+
+.sign .symbol {
+  font-size: 22px;
+}
+
+.sign .name {
+  font-weight: 700;
+}
+
+.sign .meta {
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+@media (max-width: 720px) {
+  .tray {
+    grid-template-columns: 1fr;
+    justify-content: stretch;
+  }
+  .side { display: none; }
+}
