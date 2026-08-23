@@ -6,16 +6,115 @@ import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 
 import {RealCalendarWidget} from './calendarWidget.js';
 import {formatRealDateLine, gregorianToReal} from './lib/calendar.js';
+import {attempt} from './lib/shellCompat.js';
 
 export default class RealCalendarExtension extends Extension {
     enable() {
-        this._dateMenu = Main.panel.statusArea.dateMenu;
-        this._stockCalendar = this._dateMenu._calendar;
-        this._column = this._stockCalendar.get_parent();
+        try {
+            this._build();
+        } catch (e) {
+            // A half-applied build leaves the date menu broken for the rest of
+            // the session, so undo everything before reporting the failure.
+            this._teardown();
+            throw e;
+        }
+    }
+
+    disable() {
+        this._teardown();
+    }
+
+    _build() {
+        const dateMenu = Main.panel.statusArea?.dateMenu;
+        const stockCalendar = dateMenu?._calendar;
+        const column = stockCalendar?.get_parent();
+        if (!dateMenu || !stockCalendar || !column) {
+            throw new Error('the GNOME date menu is not laid out the way this ' +
+                'extension expects, so it was left untouched');
+        }
+
+        this._dateMenu = dateMenu;
+        this._stockCalendar = stockCalendar;
+        this._column = column;
+        // Relabelling the today button is a bonus; run without it if the shell
+        // no longer exposes the button or its labels.
+        this._todayButton = dateMenu._date ?? null;
         this._settings = this.getSettings();
         this._view = 'real';
-        this._weekStart = Shell.util_get_week_start();
+        this._weekStart = this._getWeekStart();
 
+        this._buildToggle();
+        this._buildWidget();
+
+        this._column.insert_child_at_index(this._toggle, 1);
+        this._column.insert_child_above(this._widget, this._stockCalendar);
+        this._trackInColumnLayout();
+
+        this._patchTodayButton();
+
+        this._settingsChangedId = this._settings.connect('changed',
+            () => attempt('apply the new settings', () => this._applyMode()));
+        this._openId = this._dateMenu.menu.connect('open-state-changed', (_menu, isOpen) => {
+            if (!isOpen)
+                return;
+            attempt('refresh the calendar', () => {
+                const now = new Date();
+                this._widget.setGregorianDate(now);
+                this._applyTodayButton(now);
+            });
+        });
+
+        this._applyMode();
+        this._applyTodayButton(new Date());
+    }
+
+    _teardown() {
+        if (this._openId) {
+            const menu = this._dateMenu?.menu;
+            attempt('disconnect from the date menu', () => menu?.disconnect(this._openId));
+            this._openId = 0;
+        }
+        if (this._settingsChangedId) {
+            const settings = this._settings;
+            attempt('disconnect from settings', () => settings?.disconnect(this._settingsChangedId));
+            this._settingsChangedId = 0;
+        }
+        this._unpatchTodayButton();
+
+        // Must happen before the actors are destroyed: the column layout
+        // measures everything in _colActors, and a destroyed actor left there
+        // throws on the panel's next relayout.
+        for (const actor of this._addedToColActors ?? [])
+            this._forgetColActor(actor);
+        this._addedToColActors = null;
+
+        attempt('restore the default calendar', () => {
+            if (this._stockCalendar)
+                this._stockCalendar.visible = true;
+        });
+        attempt('remove the 13-month calendar', () => this._widget?.destroy());
+        attempt('remove the view toggle', () => this._toggle?.destroy());
+
+        this._widget = null;
+        this._toggle = null;
+        this._gregorianBtn = null;
+        this._realBtn = null;
+        this._dateMenu = null;
+        this._todayButton = null;
+        this._stockCalendar = null;
+        this._column = null;
+        this._settings = null;
+    }
+
+    _getWeekStart() {
+        try {
+            return Shell.util_get_week_start();
+        } catch {
+            return 0;
+        }
+    }
+
+    _buildToggle() {
         this._toggle = new St.BoxLayout({
             style_class: 'real-calendar-mode-toggle',
             x_expand: true,
@@ -32,84 +131,77 @@ export default class RealCalendarExtension extends Extension {
             label: 'Real',
             x_expand: true,
         });
-        this._gregorianBtn.connect('clicked', () => this._setView('gregorian'));
-        this._realBtn.connect('clicked', () => this._setView('real'));
+        this._gregorianBtn.connect('clicked',
+            () => attempt('show the Gregorian calendar', () => this._setView('gregorian')));
+        this._realBtn.connect('clicked',
+            () => attempt('show the 13-month calendar', () => this._setView('real')));
         this._toggle.add_child(this._gregorianBtn);
         this._toggle.add_child(this._realBtn);
+    }
 
+    _buildWidget() {
         this._widget = new RealCalendarWidget();
         this._widget.configure({
             weekStart: this._weekStart,
             showZodiac: this._settings.get_boolean('show-zodiac'),
-            onSelect: date => this._syncStock(date),
+            onSelect: date => attempt('follow the selected date',
+                () => this._syncStock(date)),
         });
-
-        this._column.insert_child_at_index(this._toggle, 1);
-        this._column.insert_child_above(this._widget, this._stockCalendar);
-
-        const layout = this._column.layout_manager;
-        this._addedToColActors = [];
-        if (layout && Array.isArray(layout._colActors)) {
-            for (const actor of [this._toggle, this._widget]) {
-                if (!layout._colActors.includes(actor)) {
-                    layout._colActors.push(actor);
-                    this._addedToColActors.push(actor);
-                }
-            }
-        }
-
-        this._origSetDate = this._dateMenu._date.setDate.bind(this._dateMenu._date);
-        this._dateMenu._date.setDate = date => {
-            this._origSetDate(date);
-            this._applyTodayButton(date);
-        };
-
-        this._settingsChangedId = this._settings.connect('changed', () => this._applyMode());
-        this._openId = this._dateMenu.menu.connect('open-state-changed', (_menu, isOpen) => {
-            if (!isOpen)
-                return;
-            const now = new Date();
-            this._widget.setGregorianDate(now);
-            this._applyTodayButton(now);
-        });
-
-        this._applyMode();
-        this._applyTodayButton(new Date());
     }
 
-    disable() {
-        if (this._openId) {
-            this._dateMenu.menu.disconnect(this._openId);
-            this._openId = 0;
-        }
-        if (this._settingsChangedId) {
-            this._settings.disconnect(this._settingsChangedId);
-            this._settingsChangedId = 0;
-        }
-        if (this._origSetDate) {
-            this._dateMenu._date.setDate = this._origSetDate;
-            this._origSetDate = null;
-            this._dateMenu._date.setDate(new Date());
-        }
+    _trackInColumnLayout() {
+        this._addedToColActors = [];
 
+        const colActors = this._column.layout_manager?._colActors;
+        if (!Array.isArray(colActors))
+            return;
+
+        for (const actor of [this._toggle, this._widget]) {
+            if (colActors.includes(actor))
+                continue;
+            colActors.push(actor);
+            this._addedToColActors.push(actor);
+            actor.connect('destroy', () => this._forgetColActor(actor));
+        }
+    }
+
+    _forgetColActor(actor) {
         const layout = this._column?.layout_manager;
-        if (layout && Array.isArray(layout._colActors) && this._addedToColActors) {
-            layout._colActors = layout._colActors.filter(
-                actor => !this._addedToColActors.includes(actor));
-        }
+        if (Array.isArray(layout?._colActors))
+            layout._colActors = layout._colActors.filter(a => a !== actor);
+        this._addedToColActors =
+            this._addedToColActors?.filter(a => a !== actor) ?? null;
+    }
 
-        this._stockCalendar.visible = true;
-        this._widget?.destroy();
-        this._toggle?.destroy();
-        this._widget = null;
-        this._toggle = null;
-        this._gregorianBtn = null;
-        this._realBtn = null;
-        this._dateMenu = null;
-        this._stockCalendar = null;
-        this._column = null;
-        this._settings = null;
-        this._addedToColActors = null;
+    _patchTodayButton() {
+        if (typeof this._todayButton?.setDate !== 'function')
+            return;
+
+        this._origSetDate = this._todayButton.setDate.bind(this._todayButton);
+        this._patchedSetDate = date => {
+            this._origSetDate(date);
+            // GNOME Shell is the caller here, so this must never throw.
+            attempt('relabel the date menu', () => this._applyTodayButton(date));
+        };
+        this._todayButton.setDate = this._patchedSetDate;
+    }
+
+    _unpatchTodayButton() {
+        const original = this._origSetDate;
+        const patched = this._patchedSetDate;
+        const button = this._todayButton;
+        this._origSetDate = null;
+        this._patchedSetDate = null;
+        if (!original || !button)
+            return;
+
+        attempt('restore the date menu label', () => {
+            // Leave any patch layered on top of ours alone; calling the
+            // original still puts the Gregorian text back.
+            if (button.setDate === patched)
+                delete button.setDate;
+            original(new Date());
+        });
     }
 
     _setView(view) {
@@ -118,6 +210,9 @@ export default class RealCalendarExtension extends Extension {
     }
 
     _applyMode() {
+        if (!this._settings || !this._widget || !this._toggle)
+            return;
+
         const replace = this._settings.get_string('calendar-mode') === 'replace';
         const showReal = replace || this._view === 'real';
 
@@ -138,13 +233,13 @@ export default class RealCalendarExtension extends Extension {
 
     _syncStock(date) {
         this._stockCalendar.setDate(date);
-        this._dateMenu._date.setDate(date);
+        this._todayButton?.setDate(date);
         if (this._dateMenu._eventsItem)
             this._dateMenu._eventsItem.setDate(date);
     }
 
     _applyTodayButton(date) {
-        if (!this._settings)
+        if (!this._settings || !this._todayButton)
             return;
 
         const replace = this._settings.get_string('calendar-mode') === 'replace';
@@ -153,10 +248,9 @@ export default class RealCalendarExtension extends Extension {
             return;
 
         const real = gregorianToReal(date);
-        const today = this._dateMenu._date;
-        if (today._dateLabel)
-            today._dateLabel.set_text(formatRealDateLine(real));
-        if (today._dayLabel)
-            today._dayLabel.set_text(real.weekdayName);
+        if (this._todayButton._dateLabel)
+            this._todayButton._dateLabel.set_text(formatRealDateLine(real));
+        if (this._todayButton._dayLabel)
+            this._todayButton._dayLabel.set_text(real.weekdayName);
     }
 }
