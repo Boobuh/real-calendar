@@ -76,12 +76,34 @@ python3 -m http.server 8765
 # open http://127.0.0.1:8765/demo/
 ```
 
+## Android APK
+
+The same demo (13×28 months, Gregorian | Real, 24-hour clock) is packaged as an offline WebView app. It reuses `lib/calendar.js` and `lib/zodiac.js`; there is no separate Kotlin calendar.
+
+Needs JDK 17+ and the Android SDK (`ANDROID_HOME`). Then:
+
+```bash
+./scripts/sync-android-assets.sh   # also runs automatically before Gradle
+cd android
+./gradlew assembleDebug
+# android/app/build/outputs/apk/debug/app-debug.apk
+```
+
+Install on a phone or emulator:
+
+```bash
+adb install -r android/app/build/outputs/apk/debug/app-debug.apk
+```
+
+Or copy the APK onto the device and open it. This is a sideload debug build, not a Play Store release.
+
 ## Layout
 
 ```
 src/real-calendar@boobuh.github.io/   GNOME Shell extension
   lib/calendar.js                     date conversion
   lib/zodiac.js                       13 signs
-demo/                                 browser preview of the date menu
+demo/                                 browser / Android WebView UI
+android/                              Kotlin wrapper that loads the demo
 bin/real-calendar.js                  print today in Real + zodiac
 ```
