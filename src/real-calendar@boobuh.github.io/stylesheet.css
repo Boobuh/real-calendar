@@ -1,0 +1,73 @@
+.real-calendar {
+    spacing: 4px;
+}
+
+.real-calendar-heading {
+    font-weight: 600;
+    font-size: 11pt;
+    padding: 4px 2px 2px;
+}
+
+.real-calendar-pager {
+    padding: 2px 0 6px;
+}
+
+.real-calendar-weekdays {
+    spacing: 0;
+    padding: 2px 0;
+}
+
+.real-calendar-weekday {
+    font-size: 9pt;
+    font-weight: 600;
+    opacity: 0.7;
+}
+
+.real-calendar-grid {
+    spacing: 0;
+}
+
+.real-calendar-selected:not(.calendar-today) {
+    border: 2px solid rgba(255, 255, 255, 0.45);
+    border-radius: 99px;
+}
+
+.real-calendar-extras {
+    padding-top: 6px;
+    spacing: 4px;
+}
+
+.real-calendar-extra-day {
+    padding: 6px 10px;
+    border-radius: 99px;
+    font-weight: 600;
+}
+
+.real-calendar-zodiac {
+    padding-top: 8px;
+    font-size: 11pt;
+    opacity: 0.9;
+}
+
+.real-calendar-gregorian {
+    font-size: 9pt;
+    opacity: 0.55;
+    padding: 2px 0 6px;
+}
+
+.real-calendar-mode-toggle {
+    spacing: 6px;
+    padding: 4px 0 8px;
+}
+
+.real-calendar-mode-button {
+    padding: 4px 10px;
+    border-radius: 99px;
+    background-color: rgba(255, 255, 255, 0.06);
+}
+
+.real-calendar-mode-active {
+    background-color: rgba(255, 122, 61, 0.85);
+    color: #111;
+    font-weight: 700;
+}

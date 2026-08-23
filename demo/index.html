@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Real Calendar</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="shell">
+    <div class="panel">
+      <span id="panel-clock">Sun Aug 23 17:05:51</span>
+    </div>
+
+    <div class="tray">
+      <aside class="side">
+        <div class="media">
+          <button type="button" aria-label="Previous">⏮</button>
+          <button type="button" aria-label="Play">▶</button>
+          <button type="button" aria-label="Next">⏭</button>
+        </div>
+        <div class="slot"></div>
+        <div class="slot"></div>
+        <div class="slot"></div>
+      </aside>
+
+      <section class="calendar-card" aria-label="Real Calendar">
+        <div class="mode-toggle" role="tablist">
+          <button type="button" id="mode-gregorian" role="tab">Gregorian</button>
+          <button type="button" id="mode-real" role="tab" class="active">Real</button>
+        </div>
+        <h1 id="heading">Sunday August 11 2026</h1>
+        <div class="pager">
+          <button type="button" id="prev" aria-label="Previous month">‹</button>
+          <div id="month-label">August</div>
+          <button type="button" id="next" aria-label="Next month">›</button>
+        </div>
+        <div class="weekdays" id="weekdays"></div>
+        <div class="grid" id="grid"></div>
+        <div class="extras" id="extras"></div>
+        <p class="zodiac" id="zodiac"></p>
+        <p class="hint" id="hint"></p>
+      </section>
+    </div>
+
+    <section class="year-board">
+      <h2>Thirteen months, thirteen signs</h2>
+      <p class="lead">
+        Weeks stay seven days. The clock stays 24-hour.
+        The extra month is <strong>Sol</strong>. The extra sign is <strong>Ophiuchus</strong> ⛎.
+      </p>
+      <div class="signs" id="signs"></div>
+    </section>
+  </div>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
