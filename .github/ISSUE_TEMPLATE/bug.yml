@@ -1,0 +1,49 @@
+name: Bug report
+description: Something wrong in the date menu, calendar math, or install
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: Thanks. Include GNOME Shell and Ubuntu versions — extensions are tightly bound to the Shell ABI.
+  - type: input
+    id: gnome
+    attributes:
+      label: GNOME Shell version
+      placeholder: "46.0"
+    validations:
+      required: true
+  - type: input
+    id: distro
+    attributes:
+      label: Distro
+      placeholder: Ubuntu 24.04
+    validations:
+      required: true
+  - type: dropdown
+    id: session
+    attributes:
+      label: Session
+      options:
+        - Wayland
+        - Xorg
+        - Not sure
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual
+    validations:
+      required: true

@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# SPDX-License-Identifier: MIT
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
@@ -13,6 +14,11 @@ fi
 
 mkdir -p "$DEST"
 cp -a "${SRC}/." "$DEST/"
+rm -f "${DEST}/schemas/gschemas.compiled"
+cp "${ROOT}/LICENSE" "${DEST}/LICENSE"
+if [[ -f "${ROOT}/data/${UUID}.metainfo.xml" ]]; then
+    cp "${ROOT}/data/${UUID}.metainfo.xml" "${DEST}/"
+fi
 glib-compile-schemas "${DEST}/schemas"
 
 echo "Installed ${UUID} to ${DEST}"

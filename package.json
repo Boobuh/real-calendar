@@ -3,14 +3,37 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
+  "license": "MIT",
+  "author": "Boobuh",
   "description": "13-month GNOME/Ubuntu calendar with a 13-sign zodiac including Ophiuchus.",
+  "homepage": "https://github.com/Boobuh/real-calendar#readme",
+  "bugs": {
+    "url": "https://github.com/Boobuh/real-calendar/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Boobuh/real-calendar.git"
+  },
+  "keywords": [
+    "gnome",
+    "gnome-shell",
+    "ubuntu",
+    "calendar",
+    "extension",
+    "widget",
+    "zodiac"
+  ],
   "bin": {
     "real-calendar": "./bin/real-calendar.js"
   },
   "scripts": {
     "test": "node --test tests/*.test.js",
+    "check": "make check",
+    "pack": "make pack",
     "demo": "python3 -m http.server 8765",
     "today": "node bin/real-calendar.js"
   },
-  "license": "MIT"
+  "engines": {
+    "node": ">=18"
+  }
 }

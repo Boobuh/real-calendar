@@ -1,0 +1,14 @@
+# SPDX-License-Identifier: MIT
+* text=auto eol=lf
+
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.ico binary
+*.zip binary
+*.gz binary
+*.mo binary
+
+Makefile text eol=lf

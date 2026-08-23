@@ -1,4 +1,58 @@
-node_modules/
+# SPDX-License-Identifier: MIT
+
+# Build artifacts (EGO zip, schema binaries, gettext)
+/build/
+/dist/
+*.zip
 gschemas.compiled
+*.gschema.valid
+*.mo
+*.gmo
+/locale/
+po/*.po~
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Python (demo server)
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Editors / OS
+*~
 *.swp
+*.swo
+*.orig
+*.rej
 .DS_Store
+Thumbs.db
+Desktop.ini
+.idea/
+*.iml
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+
+# Env and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+
+# Coverage / caches
+coverage/
+.nyc_output/
+.cache/
+.eslintcache
+
+# Cursor / local tooling
+.cursor/
+*.log

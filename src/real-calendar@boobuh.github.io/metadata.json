@@ -1,10 +1,11 @@
 {
-    "uuid": "real-calendar@boobuh.github.io",
-    "name": "Real Calendar",
-    "description": "13-month calendar (with Sol) and a 13-sign zodiac including Ophiuchus. Adds a second calendar in the GNOME date menu, or replaces the default one. 24-hour clock and 7-day week stay unchanged.",
-    "version": 1,
-    "shell-version": ["45", "46", "47", "48", "49"],
-    "url": "https://github.com/Boobuh/real-calendar",
-    "settings-schema": "org.gnome.shell.extensions.real-calendar",
-    "gettext-domain": "real-calendar"
+  "uuid": "real-calendar@boobuh.github.io",
+  "name": "Real Calendar",
+  "description": "13-month calendar (with Sol) and a 13-sign zodiac including Ophiuchus. Adds a second calendar in the GNOME date menu, or replaces the default one. 24-hour clock and 7-day week stay unchanged.",
+  "version": 1,
+  "version-name": "1.0.0",
+  "shell-version": ["45", "46", "47", "48", "49"],
+  "url": "https://github.com/Boobuh/real-calendar",
+  "settings-schema": "org.gnome.shell.extensions.real-calendar",
+  "gettext-domain": "real-calendar"
 }

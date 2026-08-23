@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    name: Tests and pack
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install pack tools
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends libglib2.0-bin zip gettext
+
+      - name: JavaScript syntax
+        run: make check
+
+      - name: Unit tests
+        run: make test
+
+      - name: Validate GSettings schema
+        run: make schemas
+
+      - name: Pack extension zip
+        run: make pack
+
+      - name: Upload zip
+        uses: actions/upload-artifact@v4
+        with:
+          name: real-calendar-shell-extension
+          path: build/*.shell-extension.zip

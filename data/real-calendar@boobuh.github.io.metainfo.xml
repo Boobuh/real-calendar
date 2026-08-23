@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  SPDX-License-Identifier: MIT
+  AppStream metainfo for GNOME Shell / Ubuntu Software.
+-->
+<component type="addon">
+  <id>real-calendar@boobuh.github.io</id>
+  <extends>org.gnome.Shell</extends>
+  <name>Real Calendar</name>
+  <summary>13-month calendar and 13-sign zodiac for the GNOME date menu</summary>
+  <description>
+    <p>
+      Adds a 13-month calendar (International Fixed Calendar, extra month Sol)
+      to the GNOME top-bar date menu. The 24-hour clock and seven-day week stay
+      unchanged. Each month has one zodiac sign, including Ophiuchus.
+    </p>
+    <p>
+      Keep GNOME’s Gregorian calendar and switch in the date menu, or replace
+      it from the extension settings.
+    </p>
+  </description>
+  <url type="homepage">https://github.com/Boobuh/real-calendar</url>
+  <url type="bugtracker">https://github.com/Boobuh/real-calendar/issues</url>
+  <metadata_license>MIT</metadata_license>
+  <project_license>MIT</project_license>
+  <developer_name>Boobuh</developer_name>
+  <update_contact>https://github.com/Boobuh/real-calendar/issues</update_contact>
+  <categories>
+    <category>Utility</category>
+    <category>Calendar</category>
+  </categories>
+  <recommends>
+    <control>pointing</control>
+  </recommends>
+  <supports>
+    <control>keyboard</control>
+  </supports>
+  <releases>
+    <release version="1.0.0" date="2026-08-23">
+      <description>
+        <p>Initial GNOME 45–49 date-menu calendar.</p>
+      </description>
+    </release>
+  </releases>
+  <content_rating type="oars-1.1"/>
+</component>
