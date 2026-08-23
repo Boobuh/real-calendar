@@ -66,6 +66,32 @@ Uninstall:
 ./scripts/uninstall.sh
 ```
 
+## If the desktop will not come back
+
+A broken extension can leave you at GNOME's *"Oh no! Something has gone wrong"* screen, where there is nothing to click but **Log Out**. Recover from a text console:
+
+1. Press **Ctrl+Alt+F3** to switch to a console, and log in with your username and password.
+2. Turn the extension off and remove it:
+
+```bash
+gnome-extensions disable real-calendar@boobuh.github.io
+rm -rf ~/.local/share/gnome-shell/extensions/real-calendar@boobuh.github.io
+```
+
+3. Restart the login screen (this closes any open apps):
+
+```bash
+sudo systemctl restart gdm3
+```
+
+To find out what actually failed before you remove the evidence:
+
+```bash
+journalctl --user -b -1 --no-pager | grep -i real-calendar
+```
+
+`Ctrl+Alt+F1` (or F2) switches back to the graphical session.
+
 ## Demo and CLI (no GNOME required)
 
 ```bash
