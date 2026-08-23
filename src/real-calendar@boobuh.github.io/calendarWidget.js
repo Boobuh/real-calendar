@@ -12,6 +12,7 @@ import {
     MONTHS,
     weekdayLetters,
 } from './lib/calendar.js';
+import {attempt, setVertical, verticalBox} from './lib/shellCompat.js';
 import {formatSignLine, getSignForReal} from './lib/zodiac.js';
 
 export const RealCalendarWidget = GObject.registerClass({
@@ -19,10 +20,10 @@ export const RealCalendarWidget = GObject.registerClass({
 }, class RealCalendarWidget extends St.BoxLayout {
     _init() {
         super._init({
-            vertical: true,
             x_expand: true,
             style_class: 'calendar real-calendar',
         });
+        setVertical(this);
 
         this._weekStart = 0;
         this._onSelect = null;
@@ -57,8 +58,10 @@ export const RealCalendarWidget = GObject.registerClass({
             x_expand: true,
             x_align: Clutter.ActorAlign.CENTER,
         });
-        this._prevButton.connect('clicked', () => this._shiftMonth(-1));
-        this._nextButton.connect('clicked', () => this._shiftMonth(1));
+        this._prevButton.connect('clicked',
+            () => attempt('show the previous month', () => this._shiftMonth(-1)));
+        this._nextButton.connect('clicked',
+            () => attempt('show the next month', () => this._shiftMonth(1)));
         pager.add_child(this._prevButton);
         pager.add_child(this._monthLabel);
         pager.add_child(this._nextButton);
@@ -77,8 +80,7 @@ export const RealCalendarWidget = GObject.registerClass({
         });
         this.add_child(this._grid);
 
-        this._extras = new St.BoxLayout({
-            vertical: true,
+        this._extras = verticalBox({
             x_expand: true,
             style_class: 'real-calendar-extras',
         });
@@ -133,6 +135,8 @@ export const RealCalendarWidget = GObject.registerClass({
     }
 
     _shiftMonth(delta) {
+        if (this._viewYear === null || this._viewMonth === null)
+            return;
         const next = addMonths(this._viewYear, this._viewMonth, delta);
         this._viewYear = next.year;
         this._viewMonth = next.month;
@@ -146,6 +150,13 @@ export const RealCalendarWidget = GObject.registerClass({
     }
 
     _refresh() {
+        if (this._viewYear === null || this._viewMonth === null)
+            return;
+
+        attempt('redraw the month', () => this._redraw());
+    }
+
+    _redraw() {
         const real = gregorianToReal(this._selected);
         this._heading.text = formatRealHeading(real);
         this._monthLabel.text = MONTHS[this._viewMonth - 1];
@@ -181,7 +192,8 @@ export const RealCalendarWidget = GObject.registerClass({
                 button.add_style_class_name('calendar-today');
             if (selected)
                 button.add_style_class_name('real-calendar-selected');
-            button.connect('clicked', () => this._selectDate(cell.gregorian));
+            button.connect('clicked',
+                () => attempt('select a day', () => this._selectDate(cell.gregorian)));
             layout.attach(button, col, row, 1, 1);
         });
 
@@ -202,7 +214,8 @@ export const RealCalendarWidget = GObject.registerClass({
                 button.add_style_class_name('calendar-today');
             if (selected)
                 button.add_style_class_name('real-calendar-selected');
-            button.connect('clicked', () => this._selectDate(extra.gregorian));
+            button.connect('clicked',
+                () => attempt('select a day', () => this._selectDate(extra.gregorian)));
             this._extras.add_child(button);
         }
 
