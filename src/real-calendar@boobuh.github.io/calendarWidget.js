@@ -2,6 +2,8 @@ import Clutter from 'gi://Clutter';
 import GObject from 'gi://GObject';
 import St from 'gi://St';
 
+import * as Main from 'resource:///org/gnome/shell/ui/main.js';
+
 import {
     addMonths,
     extraDaysForMonth,
@@ -28,6 +30,10 @@ export const RealCalendarWidget = GObject.registerClass({
         this._weekStart = 0;
         this._onSelect = null;
         this._showZodiac = true;
+        this._liveRefreshActive = false;
+        this._liveRefreshBound = false;
+        this._menuOpenId = 0;
+        this._clockNotifyId = 0;
 
         this._viewYear = null;
         this._viewMonth = null;
@@ -108,7 +114,47 @@ export const RealCalendarWidget = GObject.registerClass({
         this._weekStart = weekStart;
         this._showZodiac = showZodiac;
         this._onSelect = onSelect;
+        this._bindLiveRefresh();
         this.setGregorianDate(new Date());
+    }
+
+    _bindLiveRefresh() {
+        if (this._liveRefreshBound)
+            return;
+        this._liveRefreshBound = true;
+
+        const dateMenu = Main.panel.statusArea.dateMenu;
+        this._menuOpenId = dateMenu.menu.connect('open-state-changed', (_menu, isOpen) => {
+            if (isOpen)
+                this._startLiveRefresh();
+            else
+                this._stopLiveRefresh();
+        });
+        this._clockNotifyId = dateMenu._clock.connect('notify::clock', () => {
+            if (!this._liveRefreshActive)
+                return;
+            this.refreshTimeReading(new Date());
+        });
+        this.connect('destroy', () => {
+            this._stopLiveRefresh();
+            if (this._menuOpenId) {
+                dateMenu.menu.disconnect(this._menuOpenId);
+                this._menuOpenId = 0;
+            }
+            if (this._clockNotifyId) {
+                dateMenu._clock.disconnect(this._clockNotifyId);
+                this._clockNotifyId = 0;
+            }
+        });
+    }
+
+    _startLiveRefresh() {
+        this._liveRefreshActive = true;
+        this.refreshTimeReading(new Date());
+    }
+
+    _stopLiveRefresh() {
+        this._liveRefreshActive = false;
     }
 
     setShowZodiac(show) {

@@ -1,4 +1,3 @@
-import GLib from 'gi://GLib';
 import Shell from 'gi://Shell';
 import St from 'gi://St';
 
@@ -67,14 +66,9 @@ export default class RealCalendarExtension extends Extension {
         };
 
         this._settingsChangedId = this._settings.connect('changed', () => this._applyMode());
-        this._timeReadingTimeoutId = 0;
         this._openId = this._dateMenu.menu.connect('open-state-changed', (_menu, isOpen) => {
-            if (isOpen) {
+            if (isOpen)
                 this._syncOpenMenu(new Date());
-                this._startTimeReadingTimer();
-            } else {
-                this._stopTimeReadingTimer();
-            }
         });
 
         this._applyMode();
@@ -82,7 +76,6 @@ export default class RealCalendarExtension extends Extension {
     }
 
     disable() {
-        this._stopTimeReadingTimer();
         if (this._openId) {
             this._dateMenu.menu.disconnect(this._openId);
             this._openId = 0;
@@ -145,25 +138,6 @@ export default class RealCalendarExtension extends Extension {
         this._widget.setGregorianDate(now);
         this._applyTodayButton(now);
         this._widget.refreshTimeReading(now);
-    }
-
-    _startTimeReadingTimer() {
-        this._stopTimeReadingTimer();
-        this._timeReadingTimeoutId = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, 1, () => {
-            if (!this._dateMenu?.menu?.isOpen) {
-                this._timeReadingTimeoutId = 0;
-                return GLib.SOURCE_REMOVE;
-            }
-            this._widget.refreshTimeReading(new Date());
-            return GLib.SOURCE_CONTINUE;
-        });
-    }
-
-    _stopTimeReadingTimer() {
-        if (!this._timeReadingTimeoutId)
-            return;
-        GLib.source_remove(this._timeReadingTimeoutId);
-        this._timeReadingTimeoutId = 0;
     }
 
     _syncStock(date) {
