@@ -21,6 +21,8 @@ npm run dev
 
 `npm run dev` syncs `demo/` and `lib/` into `desktop/www/` then opens the Tauri window.
 
+The desktop build adds **platform-native styling** (macOS / Windows / Linux) via `desktop/ui/desktop.css`. GNOME shell mock chrome (media column, top clock pill) is hidden; calendar data and behavior stay identical to the extension demo.
+
 ## Release build
 
 ```bash

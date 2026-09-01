@@ -13,12 +13,13 @@
       {
         "label": "main",
         "title": "Real Calendar",
-        "width": 920,
-        "height": 860,
-        "minWidth": 360,
+        "width": 420,
+        "height": 720,
+        "minWidth": 340,
         "minHeight": 520,
         "resizable": true,
-        "center": true
+        "center": true,
+        "titleBarStyle": "Overlay"
       }
     ],
     "security": {

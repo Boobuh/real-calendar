@@ -15,6 +15,8 @@ fi
 rm -rf "${DEST}"
 mkdir -p "${DEST}/demo" "${DEST}/src/real-calendar@boobuh.github.io/lib"
 cp -a "${ROOT}/demo/." "${DEST}/demo/"
+cp -a "${ROOT}/desktop/ui/." "${DEST}/demo/"
 cp -a "${LIB}/." "${DEST}/src/real-calendar@boobuh.github.io/lib/"
+python3 "${ROOT}/scripts/patch-desktop-index.py" "${DEST}/demo/index.html"
 
 echo "Synced desktop assets to ${DEST}"
