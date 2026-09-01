@@ -98,9 +98,11 @@ Download the latest release:
 | Platform | Install |
 |----------|---------|
 | **Windows 10+** | `Real Calendar_*-setup.exe` (or `.msi`) |
-| **macOS 10.15+** | `.dmg` |
+| **macOS 10.15+** | `.dmg` — drag app to Applications ([step-by-step in README](./README.md#install-on-macos-1015-catalina-or-later)) |
 | **Linux** | `.AppImage`, `.deb`, or `.rpm` |
 | **Any browser** | `real-calendar-portable.zip` (no install) |
+
+> **Mac App Store:** postponed — Apple Developer Program ($99/year) not required; GitHub `.dmg` is the supported Mac path.
 
 ### Maintainer: cut a desktop release
 
@@ -149,4 +151,12 @@ The repo still includes Store-oriented configs (`build:store`, `tauri.microsofts
 See [Tauri Microsoft Store guide](https://v2.tauri.app/distribute/microsoft-store/) for certification details.
 
 </details>
+
+---
+
+## Mac App Store (postponed)
+
+> **Not using this path for now.** Apple Developer Program membership is **$99 USD per year**, requires legal name / address / phone, and notarized builds for a smooth first launch. Real Calendar for Mac is distributed via **GitHub Releases** (`.dmg`) instead.
+
+When you want the App Store later: enroll at [developer.apple.com/programs](https://developer.apple.com/programs/enroll/), submit through [App Store Connect](https://appstoreconnect.apple.com/), and see [Tauri App Store guide](https://v2.tauri.app/distribute/app-store/).
 

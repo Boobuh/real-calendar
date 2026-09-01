@@ -61,6 +61,10 @@ jobs:
             | **macOS 10.15+** | `.dmg` |
             | **Linux** | `.AppImage` (portable), `.deb`, or `.rpm` |
 
+            **macOS 10.15+:** open the `.dmg`, drag **Real Calendar** to **Applications**, then launch from Applications.
+
+            If macOS blocks the app (unsigned build): **System Settings → Privacy & Security → Open Anyway**, or Control-click the app → **Open** → **Open** once.
+
             **Windows:** run the `-setup.exe` installer. WebView2 is bundled if missing.
 
             **In-app updates:** this release includes `latest.json` when `TAURI_SIGNING_PRIVATE_KEY` is configured in repo secrets.

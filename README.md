@@ -111,9 +111,26 @@ Cross-platform app via [Tauri](https://tauri.app/) — same web UI and shared `l
 | Platform | Get it |
 |----------|--------|
 | **Windows** | [**Download for Windows**](https://github.com/Boobuh/real-calendar/releases/latest) → `*-setup.exe` |
-| **macOS** | [Releases](https://github.com/Boobuh/real-calendar/releases/latest) → `.dmg` |
+| **macOS** | [**Download for Mac**](https://github.com/Boobuh/real-calendar/releases/latest) → `.dmg` (see below) |
 | **Linux** | [Releases](https://github.com/Boobuh/real-calendar/releases/latest) → `.AppImage` / `.deb` / `.rpm` |
 | **Browser only** | `real-calendar-portable.zip` on the same release page |
+
+> **Mac App Store:** not planned for now (Apple Developer Program is $99/year). GitHub Releases is the official Mac download path.
+
+### Install on macOS (10.15 Catalina or later)
+
+1. Open **[Releases](https://github.com/Boobuh/real-calendar/releases/latest)** and download the **`.dmg`** file (name looks like `Real Calendar_2.0.0_aarch64.dmg` on Apple Silicon, or `_x64.dmg` on Intel Mac).
+2. Open the downloaded `.dmg` (double-click in Finder or Downloads).
+3. Drag **Real Calendar** into the **Applications** folder shown in the window.
+4. Eject the disk image (right-click the mounted volume → **Eject**).
+5. Open **Applications** → double-click **Real Calendar**.
+
+**If macOS says the app “cannot be opened” or “is from an unidentified developer”** (normal for GitHub builds without App Store notarization):
+
+- **macOS Ventura / Sonoma / Sequoia:** **System Settings → Privacy & Security** → scroll down → **Open Anyway** next to Real Calendar, then confirm.
+- **Or:** Control-click (or right-click) **Real Calendar** in Applications → **Open** → **Open** again in the dialog. You only need to do this once.
+
+No Apple ID or App Store account is required. Updates: check [Releases](https://github.com/Boobuh/real-calendar/releases/latest) for a new `.dmg`, or use in-app update when enabled in a signed release.
 
 Build from source:
 
