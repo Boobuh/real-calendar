@@ -31,6 +31,16 @@ npm install
 npm run build
 ```
 
+### Microsoft Store (Windows)
+
+```bash
+./scripts/setup-updater-keys.sh          # once — add private key to GitHub secrets
+export TAURI_SIGNING_PRIVATE_KEY="$(cat .keys/updater.key)"
+npm run build:store                      # offline WebView2 + updater artifacts
+```
+
+Sign the `-setup.exe` with your Authenticode cert, then upload to Partner Center with silent args **`/S`**. Full checklist: [PUBLISHING.md](../PUBLISHING.md#microsoft-store-windows-desktop--individual-developer).
+
 Outputs (under `desktop/src-tauri/target/release/bundle/`):
 
 | OS | Artifacts |
@@ -72,4 +82,4 @@ Regenerates `desktop/src-tauri/icons/` from the Real Calendar brand colors.
 
 ## CI
 
-GitHub Actions workflow `.github/workflows/desktop.yml` builds on Ubuntu, macOS, and Windows and uploads installers as artifacts.
+GitHub Actions workflow `.github/workflows/desktop.yml` builds on Ubuntu, macOS, and Windows and uploads installers as artifacts. The **`windows-store`** job produces Store-ready NSIS bundles when `TAURI_SIGNING_PRIVATE_KEY` is configured. Tag `desktop-v*` to run `.github/workflows/desktop-release.yml` (draft release + `latest.json`).

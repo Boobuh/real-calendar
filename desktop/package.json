@@ -7,7 +7,9 @@
     "sync": "bash ../scripts/sync-desktop-assets.sh",
     "tauri": "tauri",
     "dev": "npm run sync && tauri dev",
-    "build": "npm run sync && tauri build"
+    "build": "npm run sync && tauri build",
+    "build:release": "npm run sync && tauri build --config src-tauri/tauri.release.conf.json",
+    "build:store": "npm run sync && tauri build --no-bundle --config src-tauri/tauri.release.conf.json && tauri bundle --config src-tauri/tauri.microsoftstore.conf.json --config src-tauri/tauri.release.conf.json"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^2.8.0"

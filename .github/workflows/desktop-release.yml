@@ -1,0 +1,64 @@
+name: Desktop Release
+
+on:
+  push:
+    tags:
+      - 'desktop-v*'
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: windows-latest
+            target: windows
+            store_config: --config src-tauri/tauri.microsoftstore.conf.json
+          - platform: macos-latest
+            target: macos
+            store_config: ''
+          - platform: ubuntu-24.04
+            target: linux
+            store_config: ''
+
+    runs-on: ${{ matrix.platform }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: desktop/package-lock.json
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - name: Linux dependencies
+        if: matrix.target == 'linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libwebkit2gtk-4.1-dev \
+            libappindicator3-dev \
+            librsvg2-dev \
+            patchelf
+
+      - uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+        with:
+          projectPath: desktop
+          tagName: desktop-v__VERSION__
+          releaseName: Real Calendar Desktop v__VERSION__
+          releaseBody: |
+            Desktop builds for Windows, macOS, and Linux.
+
+            Windows Microsoft Store builds use the NSIS `-setup.exe` with silent install `/S`.
+            Updater manifest: `latest.json` on this release (for in-app updates).
+          releaseDraft: true
+          args: --config src-tauri/tauri.release.conf.json ${{ matrix.store_config }}
