@@ -2,3 +2,15 @@ node_modules/
 gschemas.compiled
 *.swp
 .DS_Store
+
+# GNOME extension packaging output
+build/
+
+# Android Gradle (source lives on feat/android-apk; ignore local builds everywhere)
+android/.gradle/
+android/local.properties
+android/.idea/
+android/**/build/
+android/app/src/main/assets/
+android/**/*.apk
+android/**/*.aab
