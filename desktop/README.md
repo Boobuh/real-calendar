@@ -33,7 +33,9 @@ npm run build
 
 ### GitHub Releases (recommended)
 
-Users download installers from **GitHub Releases** — no Microsoft Store or Partner Center.
+Users download installers from **GitHub Releases** — no App Store or Microsoft Partner Center.
+
+**Mac users:** [Install on macOS](../README.md#install-on-macos-1015-catalina-or-later) (download `.dmg`, drag to Applications, bypass Gatekeeper once if needed). Mac App Store is **postponed** ($99/year Apple Developer Program).
 
 ```bash
 # from repo root, after bumping version in tauri.conf.json / Cargo.toml / package.json
