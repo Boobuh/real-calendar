@@ -1,0 +1,55 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Real Calendar",
+  "version": "2.0.0",
+  "identifier": "io.github.boobuh.real-calendar",
+  "build": {
+    "beforeDevCommand": "npm run sync",
+    "beforeBuildCommand": "npm run sync",
+    "frontendDist": "../www/demo"
+  },
+  "app": {
+    "windows": [
+      {
+        "label": "main",
+        "title": "Real Calendar",
+        "width": 920,
+        "height": 860,
+        "minWidth": 360,
+        "minHeight": 520,
+        "resizable": true,
+        "center": true
+      }
+    ],
+    "security": {
+      "csp": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:"
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "category": "Utility",
+    "shortDescription": "13-month calendar with Ophiuchus and 369 time reading",
+    "longDescription": "Real Calendar shows the International Fixed Calendar (13 months of 28 days, month Sol, 13 zodiac signs including Ophiuchus) with live 369 time reading. The 24-hour clock and seven-day week stay unchanged.",
+    "linux": {
+      "deb": {
+        "depends": []
+      }
+    },
+    "macOS": {
+      "minimumSystemVersion": "10.15"
+    },
+    "windows": {
+      "webviewInstallMode": {
+        "type": "downloadBootstrapper"
+      }
+    }
+  }
+}

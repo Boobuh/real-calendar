@@ -1,0 +1,15 @@
+{
+  "name": "real-calendar-desktop",
+  "private": true,
+  "version": "2.0.0",
+  "description": "Real Calendar desktop app for macOS and Windows (Tauri)",
+  "scripts": {
+    "sync": "bash ../scripts/sync-desktop-assets.sh",
+    "tauri": "tauri",
+    "dev": "npm run sync && tauri dev",
+    "build": "npm run sync && tauri build"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2.8.0"
+  }
+}

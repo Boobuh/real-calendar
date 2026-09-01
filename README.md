@@ -96,6 +96,21 @@ python3 -m http.server 8765
 src/real-calendar@boobuh.github.io/   GNOME Shell extension
   lib/calendar.js                     date conversion
   lib/zodiac.js                       13 signs
+  lib/timeReading.js                  369 time reading
 demo/                                 browser preview of the date menu
+desktop/                              Tauri app (macOS, Windows, Linux)
 bin/real-calendar.js                  print today in Real + zodiac
 ```
+
+## Desktop (macOS & Windows)
+
+Cross-platform app via [Tauri](https://tauri.app/) — same web UI and shared `lib/` as the demo (no Swift rewrite).
+
+```bash
+cd desktop
+npm install
+npm run dev      # development window
+npm run build    # .dmg / .msi / .deb / .AppImage
+```
+
+See [desktop/README.md](./desktop/README.md) for platform prerequisites and CI artifacts.

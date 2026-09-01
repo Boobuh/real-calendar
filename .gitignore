@@ -14,3 +14,9 @@ android/**/build/
 android/app/src/main/assets/
 android/**/*.apk
 android/**/*.aab
+
+# Tauri desktop (synced web assets + local build output)
+desktop/www/
+desktop/node_modules/
+desktop/src-tauri/target/
+desktop/src-tauri/gen/
