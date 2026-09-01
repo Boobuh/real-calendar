@@ -9,6 +9,7 @@ import {
     gregorianToReal,
     weekdayLetters,
 } from '../src/real-calendar@boobuh.github.io/lib/calendar.js';
+import {formatTimeReading} from '../src/real-calendar@boobuh.github.io/lib/timeReading.js';
 import {SIGNS, formatSignDetail, getSignForReal} from '../src/real-calendar@boobuh.github.io/lib/zodiac.js';
 
 const weekStart = 0;
@@ -24,6 +25,7 @@ const els = {
     grid: document.getElementById('grid'),
     extras: document.getElementById('extras'),
     zodiac: document.getElementById('zodiac'),
+    timeReading: document.getElementById('time-reading'),
     hint: document.getElementById('hint'),
     signs: document.getElementById('signs'),
     gregorianBtn: document.getElementById('mode-gregorian'),
@@ -58,7 +60,15 @@ function fromLocalIso(value) {
 }
 
 function tickClock() {
-    els.clock.textContent = formatPanelClock(new Date());
+    const now = new Date();
+    els.clock.textContent = formatPanelClock(now);
+    refreshTimeReading(now);
+}
+
+function refreshTimeReading(now = new Date()) {
+    const reading = formatTimeReading(now);
+    els.timeReading.textContent = reading;
+    els.timeReading.hidden = reading.length === 0;
 }
 
 function shiftMonth(delta) {

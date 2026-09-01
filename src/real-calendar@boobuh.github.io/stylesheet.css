@@ -49,6 +49,12 @@
     opacity: 0.9;
 }
 
+.real-calendar-time-reading {
+    font-size: 10pt;
+    opacity: 0.85;
+    padding: 0 2px 4px;
+}
+
 .real-calendar-gregorian {
     font-size: 9pt;
     opacity: 0.55;

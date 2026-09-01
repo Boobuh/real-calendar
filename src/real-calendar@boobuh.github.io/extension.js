@@ -62,6 +62,7 @@ export default class RealCalendarExtension extends Extension {
         this._dateMenu._date.setDate = date => {
             this._origSetDate(date);
             this._applyTodayButton(date);
+            this._widget.refreshTimeReading(date);
         };
 
         this._settingsChangedId = this._settings.connect('changed', () => this._applyMode());
@@ -71,6 +72,7 @@ export default class RealCalendarExtension extends Extension {
             const now = new Date();
             this._widget.setGregorianDate(now);
             this._applyTodayButton(now);
+            this._widget.refreshTimeReading(now);
         });
 
         this._applyMode();

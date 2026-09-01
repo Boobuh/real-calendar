@@ -12,6 +12,7 @@ import {
     MONTHS,
     weekdayLetters,
 } from './lib/calendar.js';
+import {formatTimeReading} from './lib/timeReading.js';
 import {formatSignLine, getSignForReal} from './lib/zodiac.js';
 
 export const RealCalendarWidget = GObject.registerClass({
@@ -89,6 +90,12 @@ export const RealCalendarWidget = GObject.registerClass({
             x_expand: true,
         });
         this.add_child(this._zodiac);
+
+        this._timeReading = new St.Label({
+            style_class: 'real-calendar-time-reading',
+            x_expand: true,
+        });
+        this.add_child(this._timeReading);
 
         this._gregorianHint = new St.Label({
             style_class: 'real-calendar-gregorian',
@@ -209,6 +216,13 @@ export const RealCalendarWidget = GObject.registerClass({
         const sign = getSignForReal(real);
         this._zodiac.visible = this._showZodiac;
         this._zodiac.text = this._showZodiac ? formatSignLine(sign) : '';
+        this.refreshTimeReading();
         this._gregorianHint.text = `Gregorian · ${formatGregorianLine(this._selected)}`;
+    }
+
+    refreshTimeReading(now = new Date()) {
+        const reading = formatTimeReading(now);
+        this._timeReading.visible = reading.length > 0;
+        this._timeReading.text = reading;
     }
 });

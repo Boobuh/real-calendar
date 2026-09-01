@@ -7,6 +7,7 @@ import {
     formatRealHeading,
     gregorianToReal,
 } from '../src/real-calendar@boobuh.github.io/lib/calendar.js';
+import {formatTimeReadingWithClock} from '../src/real-calendar@boobuh.github.io/lib/timeReading.js';
 import {formatSignDetail, getSignForReal} from '../src/real-calendar@boobuh.github.io/lib/zodiac.js';
 
 const input = process.argv[2];
@@ -31,3 +32,6 @@ console.log(formatRealHeading(real));
 console.log(`Gregorian  ${formatGregorianLine(date)}`);
 console.log(`Clock      ${formatPanelClock(date)}  (${format24h(date)})`);
 console.log(`Zodiac     ${formatSignDetail(sign)}`);
+const reading = formatTimeReadingWithClock(date);
+if (reading)
+    console.log(`369 time   ${reading}`);
