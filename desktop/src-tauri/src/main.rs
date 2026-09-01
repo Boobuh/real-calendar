@@ -1,7 +1,6 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 use tauri::Manager;
-use tauri_plugin_process::ProcessExt;
 use tauri_plugin_updater::UpdaterExt;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -47,7 +46,7 @@ async fn check_for_updates(app: tauri::AppHandle) -> tauri_plugin_updater::Resul
                 || {},
             )
             .await?;
-        app.restart();
+        app.request_restart();
     }
     Ok(())
 }
