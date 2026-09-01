@@ -66,6 +66,20 @@ Uninstall:
 ./scripts/uninstall.sh
 ```
 
+## Ubuntu App Center and software stores
+
+GNOME Shell extensions are **not** published as snaps. To get Real Calendar onto Ubuntu desktops:
+
+1. **Extension Manager** (install from App Center) → browse extensions after we publish to [extensions.gnome.org](https://extensions.gnome.org/).
+2. **`.deb` package** — `make`-less build: see [PUBLISHING.md](./PUBLISHING.md) for `debuild`, PPA, and Ubuntu universe steps so App Center can list `gnome-shell-extension-real-calendar`.
+
+Packaging helpers:
+
+```bash
+make pack    # EGO upload zip → build/*.shell-extension.zip
+make test    # conversion + time-reading tests
+```
+
 ## Demo and CLI (no GNOME required)
 
 ```bash

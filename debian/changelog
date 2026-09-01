@@ -1,0 +1,6 @@
+gnome-shell-extension-real-calendar (2.0.0-1) noble; urgency=medium
+
+  * Debian packaging for Ubuntu Software / App Center (.deb search).
+  * 369 time reading with live updates in the date menu.
+
+ -- Boobuh <https://github.com/Boobuh/real-calendar/issues>  Tue, 02 Sep 2026 00:45:00 +0300

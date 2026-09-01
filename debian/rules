@@ -1,0 +1,23 @@
+#!/usr/bin/make -f
+# SPDX-License-Identifier: MIT
+
+export DH_VERBOSE = 1
+
+%:
+	dh $@
+
+override_dh_auto_install:
+	install -d debian/gnome-shell-extension-real-calendar/usr/share/gnome-shell/extensions/real-calendar@boobuh.github.io
+	cp -a src/real-calendar@boobuh.github.io/. \
+		debian/gnome-shell-extension-real-calendar/usr/share/gnome-shell/extensions/real-calendar@boobuh.github.io/
+	glib-compile-schemas \
+		debian/gnome-shell-extension-real-calendar/usr/share/gnome-shell/extensions/real-calendar@boobuh.github.io/schemas
+	install -d debian/gnome-shell-extension-real-calendar/usr/share/metainfo
+	install -m 644 data/io.github.boobuh.real-calendar.metainfo.xml \
+		debian/gnome-shell-extension-real-calendar/usr/share/metainfo/
+	install -d debian/gnome-shell-extension-real-calendar/usr/share/icons/hicolor/scalable/apps
+	install -m 644 data/icons/io.github.boobuh.real-calendar.svg \
+		debian/gnome-shell-extension-real-calendar/usr/share/icons/hicolor/scalable/apps/
+
+override_dh_auto_test:
+	@npm test

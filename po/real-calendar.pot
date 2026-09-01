@@ -1,0 +1,56 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the real-calendar package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: real-calendar 1.0.0\n"
+"Report-Msgid-Bugs-To: https://github.com/Boobuh/real-calendar/issues\n"
+"POT-Creation-Date: 2026-08-23 17:29+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/real-calendar@boobuh.github.io/prefs.js:14
+msgid "Real Calendar"
+msgstr ""
+
+#: src/real-calendar@boobuh.github.io/prefs.js:19
+msgid "Date menu"
+msgstr ""
+
+#: src/real-calendar@boobuh.github.io/prefs.js:20
+msgid ""
+"The 24-hour clock and the seven-day week stay as they are. This extension "
+"only changes how months and zodiac dates are shown."
+msgstr ""
+
+#: src/real-calendar@boobuh.github.io/prefs.js:25
+msgid "Calendar display"
+msgstr ""
+
+#: src/real-calendar@boobuh.github.io/prefs.js:26
+msgid "Keep GNOME’s calendar and switch in the date menu, or replace it."
+msgstr ""
+
+#: src/real-calendar@boobuh.github.io/prefs.js:28
+msgid "Second option (toggle in the date menu)"
+msgstr ""
+
+#: src/real-calendar@boobuh.github.io/prefs.js:29
+msgid "Replace the default calendar"
+msgstr ""
+
+#: src/real-calendar@boobuh.github.io/prefs.js:40
+msgid "Show zodiac"
+msgstr ""
+
+#: src/real-calendar@boobuh.github.io/prefs.js:41
+msgid "Thirteen signs, including Ophiuchus, one per 28-day month."
+msgstr ""

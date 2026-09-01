@@ -1,0 +1,28 @@
+Source: gnome-shell-extension-real-calendar
+Section: gnome
+Priority: optional
+Maintainer: Boobuh <https://github.com/Boobuh/real-calendar/issues>
+Build-Depends: debhelper-compat (= 13),
+               nodejs,
+               npm
+Standards-Version: 4.6.2
+Rules-Requires-Root: no
+Homepage: https://github.com/Boobuh/real-calendar
+Vcs-Browser: https://github.com/Boobuh/real-calendar
+Vcs-Git: https://github.com/Boobuh/real-calendar.git
+
+Package: gnome-shell-extension-real-calendar
+Architecture: all
+Depends: ${misc:Depends},
+         gnome-shell (>= 46~),
+         gnome-shell-common
+Description: 13-month Real Calendar for the GNOME date menu
+ Real Calendar adds the International Fixed Calendar (13 months of 28 days,
+ extra month Sol, Year Day and Leap Day) to the GNOME top-bar date menu.
+ .
+ Each month maps to one of thirteen zodiac signs, including Ophiuchus.
+ Non-zero clock digits show 369 time meanings under the zodiac line.
+ .
+ Toggle between Gregorian and Real in the date menu, or replace the default
+ calendar from the extension settings. The 24-hour clock and seven-day week
+ are unchanged.

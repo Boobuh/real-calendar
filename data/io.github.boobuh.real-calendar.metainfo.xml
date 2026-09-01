@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  SPDX-License-Identifier: MIT
+  AppStream metadata for GNOME Software and Ubuntu package managers.
+-->
+<component type="addon">
+  <id>io.github.boobuh.real-calendar</id>
+  <extends>org.gnome.Shell</extends>
+  <name>Real Calendar</name>
+  <summary>13-month calendar, Ophiuchus zodiac, and 369 time reading</summary>
+  <description>
+    <p>
+      Adds a 13-month calendar (International Fixed Calendar, extra month Sol)
+      to the GNOME top-bar date menu. The 24-hour clock and seven-day week stay
+      unchanged. Each 28-day month has one zodiac sign, including Ophiuchus.
+    </p>
+    <p>
+      Non-zero clock digits map to 369 time meanings (Love, Direction, Balance,
+      and more) and update live while the menu is open.
+    </p>
+    <p>
+      Keep GNOME’s Gregorian calendar and switch in the date menu, or replace
+      it from the extension settings.
+    </p>
+  </description>
+  <icon type="stock">office-calendar</icon>
+  <url type="homepage">https://github.com/Boobuh/real-calendar</url>
+  <url type="bugtracker">https://github.com/Boobuh/real-calendar/issues</url>
+  <url type="vcs-browser">https://github.com/Boobuh/real-calendar</url>
+  <metadata_license>MIT</metadata_license>
+  <project_license>MIT</project_license>
+  <developer id="io.github.boobuh">
+    <name>Boobuh</name>
+  </developer>
+  <update_contact>https://github.com/Boobuh/real-calendar/issues</update_contact>
+  <categories>
+    <category>Utility</category>
+    <category>Calendar</category>
+  </categories>
+  <recommends>
+    <control>pointing</control>
+  </recommends>
+  <supports>
+    <control>keyboard</control>
+  </supports>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://raw.githubusercontent.com/Boobuh/real-calendar/main/data/screenshots/date-menu.png</image>
+      <caption>Real Calendar in the GNOME date menu with 369 time reading</caption>
+    </screenshot>
+  </screenshots>
+  <releases>
+    <release version="2.0.0" date="2026-09-02">
+      <description>
+        <p>369 time reading under the zodiac line with live clock updates.</p>
+      </description>
+    </release>
+    <release version="1.0.0" date="2026-08-23">
+      <description>
+        <p>Initial GNOME 45–49 date-menu calendar with 13 signs.</p>
+      </description>
+    </release>
+  </releases>
+  <content_rating type="oars-1.1"/>
+</component>
