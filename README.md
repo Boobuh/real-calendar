@@ -114,3 +114,11 @@ npm run build    # .dmg / .msi / .deb / .AppImage
 ```
 
 See [desktop/README.md](./desktop/README.md) for platform prerequisites and CI artifacts.
+
+Full compatibility matrix (Debian, Fedora, Arch, older Mac/Windows): [packaging/COMPATIBILITY.md](./packaging/COMPATIBILITY.md).
+
+Portable offline zip for the widest browser support:
+
+```bash
+make portable   # build/real-calendar-portable.zip
+```

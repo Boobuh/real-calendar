@@ -7,17 +7,33 @@ on:
       - 'desktop/**'
       - 'demo/**'
       - 'src/real-calendar@boobuh.github.io/lib/**'
-      - 'scripts/sync-desktop-assets.sh'
+      - 'scripts/**'
+      - 'packaging/**'
       - '.github/workflows/desktop.yml'
   pull_request:
     paths:
       - 'desktop/**'
       - 'demo/**'
       - 'src/real-calendar@boobuh.github.io/lib/**'
-      - 'scripts/sync-desktop-assets.sh'
+      - 'scripts/**'
+      - 'packaging/**'
       - '.github/workflows/desktop.yml'
 
 jobs:
+  portable:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Build portable web zip
+        run: make portable
+      - uses: actions/upload-artifact@v4
+        with:
+          name: real-calendar-portable-web
+          path: build/real-calendar-portable.zip
+
   build:
     strategy:
       fail-fast: false
@@ -61,13 +77,14 @@ jobs:
         working-directory: desktop
         run: npm run build
 
-      - name: Upload Linux bundle
+      - name: Upload Linux bundles
         if: matrix.target == 'linux'
         uses: actions/upload-artifact@v4
         with:
           name: real-calendar-linux
           path: |
             desktop/src-tauri/target/release/bundle/deb/*.deb
+            desktop/src-tauri/target/release/bundle/rpm/*.rpm
             desktop/src-tauri/target/release/bundle/appimage/*.AppImage
 
       - name: Upload macOS bundle

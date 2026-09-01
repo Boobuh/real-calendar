@@ -7,7 +7,7 @@ ZIP       := $(BUILD)/$(UUID).shell-extension.zip
 POT       := po/real-calendar.pot
 JS_CHECK  := $(shell find bin demo tests $(SRC) -name '*.js' -print)
 
-.PHONY: help test check schemas pot pack install uninstall clean
+.PHONY: help test check schemas pot pack portable install uninstall clean
 
 help:
 	@printf '%s\n' \
@@ -16,6 +16,7 @@ help:
 		'schemas    validate GSettings XML' \
 		'pot        refresh gettext template' \
 		'pack       build the EGO .shell-extension.zip' \
+		'portable   offline web zip for old macOS/Windows/Linux browsers' \
 		'install    install into ~/.local/share/gnome-shell/extensions' \
 		'uninstall  remove the local install' \
 		'clean      remove build artifacts'
@@ -43,6 +44,9 @@ pack: $(ZIP)
 
 $(ZIP):
 	./scripts/pack.sh
+
+portable:
+	./scripts/build-portable-web.sh
 
 install:
 	./scripts/install.sh

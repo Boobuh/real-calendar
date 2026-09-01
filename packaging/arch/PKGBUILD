@@ -1,0 +1,46 @@
+# Maintainer: Boobuh <https://github.com/Boobuh/real-calendar/issues>
+pkgname=real-calendar
+pkgver=2.0.0
+pkgrel=1
+pkgdesc="13-month Real Calendar desktop app and offline web UI"
+arch=('x86_64' 'aarch64')
+url="https://github.com/Boobuh/real-calendar"
+license=('MIT')
+depends=(
+  'gtk3'
+  'webkit2gtk-4.1'
+  'glib2'
+  'hicolor-icon-theme'
+)
+makedepends=(
+  'rust'
+  'npm'
+  'patchelf'
+  'desktop-file-utils'
+)
+options=('!strip')
+source=("$url/archive/refs/tags/v$pkgver.tar.gz")
+sha256sums=('SKIP')
+
+prepare() {
+  cd "$pkgname-$pkgver/desktop"
+  npm ci
+  npm run sync
+}
+
+build() {
+  cd "$pkgname-$pkgver/desktop"
+  npm run build
+}
+
+package() {
+  local root="$srcdir/real-calendar-$pkgver"
+  install -Dm755 "$root/desktop/src-tauri/target/release/real-calendar-desktop" \
+    "$pkgdir/usr/bin/real-calendar"
+  install -Dm644 "$root/data/icons/io.github.boobuh.real-calendar.svg" \
+    "$pkgdir/usr/share/icons/hicolor/scalable/apps/io.github.boobuh.real-calendar.svg"
+  install -Dm644 "$root/data/io.github.boobuh.real-calendar.metainfo.xml" \
+    "$pkgdir/usr/share/metainfo/io.github.boobuh.real-calendar.metainfo.xml"
+  install -Dm644 "$root/packaging/flatpak/io.github.boobuh.real-calendar.desktop" \
+    "$pkgdir/usr/share/applications/io.github.boobuh.real-calendar.desktop"
+}

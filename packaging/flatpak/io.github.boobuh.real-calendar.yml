@@ -1,0 +1,32 @@
+# Flatpak manifest — builds the Tauri desktop app for any Linux with Flatpak.
+app-id: io.github.boobuh.real-calendar
+runtime: org.gnome.Platform
+runtime-version: '46'
+sdk: org.gnome.Sdk
+sdk-extensions:
+  - org.freedesktop.Sdk.Extension.rust-stable
+command: real-calendar
+finish-args:
+  - --share=ipc
+  - --socket=fallback-x11
+  - --socket=wayland
+  - --device=dri
+build-options:
+  append-path: /usr/lib/sdk/rust-stable/bin
+  env:
+    CARGO_HOME: /run/build/real-calendar/cargo
+    NPM_CONFIG_LOGLEVEL: warn
+modules:
+  - name: real-calendar
+    buildsystem: simple
+    build-commands:
+      - npm ci --prefix desktop
+      - npm run sync --prefix desktop
+      - cargo build --release --manifest-path desktop/src-tauri/Cargo.toml
+      - install -Dm755 desktop/src-tauri/target/release/real-calendar-desktop /app/bin/real-calendar
+      - install -Dm644 data/icons/io.github.boobuh.real-calendar.svg /app/share/icons/hicolor/scalable/apps/io.github.boobuh.real-calendar.svg
+      - install -Dm644 data/io.github.boobuh.real-calendar.metainfo.xml /app/share/metainfo/io.github.boobuh.real-calendar.metainfo.xml
+      - install -Dm644 packaging/flatpak/io.github.boobuh.real-calendar.desktop /app/share/applications/io.github.boobuh.real-calendar.desktop
+    sources:
+      - type: dir
+        path: ../..

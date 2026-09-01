@@ -35,9 +35,19 @@ Outputs (under `desktop/src-tauri/target/release/bundle/`):
 
 | OS | Artifacts |
 |----|-----------|
-| macOS | `.dmg`, `.app` |
-| Windows | `.msi`, `-setup.exe` (NSIS) |
-| Linux | `.deb`, `.AppImage` |
+| macOS 10.15+ | `.dmg`, `.app` |
+| Windows 10+ | `.msi`, `-setup.exe` (NSIS) |
+| Debian / Ubuntu | `.deb` |
+| Fedora / RHEL / openSUSE | `.rpm` |
+| Any Linux | `.AppImage` (most portable native binary) |
+
+**Older systems (pre–Windows 10, pre–macOS 10.15, or no WebKit):** use the portable web zip from the repo root:
+
+```bash
+make portable   # → build/real-calendar-portable.zip
+```
+
+See [packaging/COMPATIBILITY.md](../packaging/COMPATIBILITY.md) for the full matrix (Debian, Fedora, Arch, Flatpak, XP limits).
 
 ## Asset sync
 

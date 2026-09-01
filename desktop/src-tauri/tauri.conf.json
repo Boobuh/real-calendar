@@ -41,7 +41,22 @@
     "longDescription": "Real Calendar shows the International Fixed Calendar (13 months of 28 days, month Sol, 13 zodiac signs including Ophiuchus) with live 369 time reading. The 24-hour clock and seven-day week stay unchanged.",
     "linux": {
       "deb": {
-        "depends": []
+        "depends": [
+          "libwebkit2gtk-4.1-0",
+          "libayatana-appindicator3-1 | libappindicator3-1"
+        ],
+        "section": "utils",
+        "priority": "optional"
+      },
+      "rpm": {
+        "depends": [
+          "webkit2gtk4.1 >= 2.40",
+          "hicolor-icon-theme"
+        ],
+        "release": "1"
+      },
+      "appimage": {
+        "bundleMediaFramework": false
       }
     },
     "macOS": {
@@ -49,7 +64,8 @@
     },
     "windows": {
       "webviewInstallMode": {
-        "type": "downloadBootstrapper"
+        "type": "embedBootstrapper",
+        "silent": true
       }
     }
   }

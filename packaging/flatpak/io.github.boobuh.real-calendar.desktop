@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Real Calendar
+Comment=13-month calendar with Ophiuchus and 369 time reading
+Exec=real-calendar
+Icon=io.github.boobuh.real-calendar
+Categories=Utility;Calendar;
+Terminal=false
