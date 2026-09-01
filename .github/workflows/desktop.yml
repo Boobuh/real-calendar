@@ -102,37 +102,3 @@ jobs:
           path: |
             desktop/src-tauri/target/release/bundle/msi/*.msi
             desktop/src-tauri/target/release/bundle/nsis/*.exe
-
-  windows-store:
-    runs-on: windows-latest
-    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/feat/desktop-tauri')
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-          cache: npm
-          cache-dependency-path: desktop/package-lock.json
-
-      - uses: dtolnay/rust-toolchain@stable
-
-      - name: Install npm dependencies
-        working-directory: desktop
-        run: npm ci
-
-      - name: Build Microsoft Store installer
-        working-directory: desktop
-        env:
-          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
-        run: npm run build:store
-
-      - name: Upload Microsoft Store artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: real-calendar-windows-store
-          path: |
-            desktop/src-tauri/target/release/bundle/nsis/*-setup.exe
-            desktop/src-tauri/target/release/bundle/nsis/*-setup.exe.sig
-            desktop/src-tauri/target/release/bundle/nsis/*.nsis.zip
-            desktop/src-tauri/target/release/bundle/nsis/*.nsis.zip.sig

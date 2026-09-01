@@ -16,13 +16,10 @@ jobs:
         include:
           - platform: windows-latest
             target: windows
-            store_config: --config src-tauri/tauri.microsoftstore.conf.json
           - platform: macos-latest
             target: macos
-            store_config: ''
           - platform: ubuntu-24.04
             target: linux
-            store_config: ''
 
     runs-on: ${{ matrix.platform }}
 
@@ -56,9 +53,38 @@ jobs:
           tagName: desktop-v__VERSION__
           releaseName: Real Calendar Desktop v__VERSION__
           releaseBody: |
-            Desktop builds for Windows, macOS, and Linux.
+            ## Downloads
 
-            Windows Microsoft Store builds use the NSIS `-setup.exe` with silent install `/S`.
-            Updater manifest: `latest.json` on this release (for in-app updates).
+            | Platform | File |
+            |----------|------|
+            | **Windows 10+** | `*-setup.exe` (recommended) or `.msi` |
+            | **macOS 10.15+** | `.dmg` |
+            | **Linux** | `.AppImage` (portable), `.deb`, or `.rpm` |
+
+            **Windows:** run the `-setup.exe` installer. WebView2 is bundled if missing.
+
+            **In-app updates:** this release includes `latest.json` when `TAURI_SIGNING_PRIVATE_KEY` is configured in repo secrets.
+
+            **Browser-only / older systems:** see `real-calendar-portable.zip` attached below.
+
+            Source: https://github.com/Boobuh/real-calendar
           releaseDraft: true
-          args: --config src-tauri/tauri.release.conf.json ${{ matrix.store_config }}
+          args: --config src-tauri/tauri.release.conf.json
+
+  attach-portable:
+    needs: publish
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Build portable web zip
+        run: make portable
+
+      - name: Attach portable zip to release
+        run: gh release upload "${GITHUB_REF_NAME}" build/real-calendar-portable.zip --clobber
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

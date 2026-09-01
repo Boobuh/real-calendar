@@ -26,6 +26,8 @@ echo "Add the private key to GitHub → Settings → Secrets → Actions:"
 echo "  Name: TAURI_SIGNING_PRIVATE_KEY"
 echo "  Value: contents of $PRIVATE_KEY"
 echo
+echo "Used by desktop-release.yml for signed updater artifacts on GitHub Releases."
+echo
 echo "Optional local builds:"
 echo "  export TAURI_SIGNING_PRIVATE_KEY=\"\$(cat '$PRIVATE_KEY')\""
 echo

@@ -106,6 +106,17 @@ bin/real-calendar.js                  print today in Real + zodiac
 
 Cross-platform app via [Tauri](https://tauri.app/) — same web UI and shared `lib/` as the demo (no Swift rewrite).
 
+### Download (no app store)
+
+| Platform | Get it |
+|----------|--------|
+| **Windows** | [**Download for Windows**](https://github.com/Boobuh/real-calendar/releases/latest) → `*-setup.exe` |
+| **macOS** | [Releases](https://github.com/Boobuh/real-calendar/releases/latest) → `.dmg` |
+| **Linux** | [Releases](https://github.com/Boobuh/real-calendar/releases/latest) → `.AppImage` / `.deb` / `.rpm` |
+| **Browser only** | `real-calendar-portable.zip` on the same release page |
+
+Build from source:
+
 ```bash
 cd desktop
 npm install
@@ -113,7 +124,7 @@ npm run dev      # development window
 npm run build    # .dmg / .msi / .deb / .AppImage
 ```
 
-See [desktop/README.md](./desktop/README.md) for platform prerequisites and CI artifacts.
+See [desktop/README.md](./desktop/README.md) for platform prerequisites. Maintainer release flow: [PUBLISHING.md](./PUBLISHING.md#desktop-app-windows--macos--linux--recommended).
 
 Full compatibility matrix (Debian, Fedora, Arch, older Mac/Windows): [packaging/COMPATIBILITY.md](./packaging/COMPATIBILITY.md).
 

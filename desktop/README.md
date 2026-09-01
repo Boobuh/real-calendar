@@ -31,15 +31,26 @@ npm install
 npm run build
 ```
 
-### Microsoft Store (Windows)
+### GitHub Releases (recommended)
+
+Users download installers from **GitHub Releases** — no Microsoft Store or Partner Center.
 
 ```bash
-./scripts/setup-updater-keys.sh          # once — add private key to GitHub secrets
-export TAURI_SIGNING_PRIVATE_KEY="$(cat .keys/updater.key)"
-npm run build:store                      # offline WebView2 + updater artifacts
+# from repo root, after bumping version in tauri.conf.json / Cargo.toml / package.json
+./scripts/release-desktop.sh 2.0.0
 ```
 
-Sign the `-setup.exe` with your Authenticode cert, then upload to Partner Center with silent args **`/S`**. Full checklist: [PUBLISHING.md](../PUBLISHING.md#microsoft-store-windows-desktop--individual-developer).
+CI (`.github/workflows/desktop-release.yml`) builds Windows `.exe`/`.msi`, macOS `.dmg`, Linux bundles, `latest.json`, and `real-calendar-portable.zip`. Review the draft release, then publish.
+
+For in-app updates, run `./scripts/setup-updater-keys.sh` once and set GitHub secret `TAURI_SIGNING_PRIVATE_KEY`.
+
+### Microsoft Store (optional)
+
+Not recommended — requires Microsoft identity verification. Config remains if you need it later:
+
+```bash
+npm run build:store   # offline WebView2 bundle; see PUBLISHING.md
+```
 
 Outputs (under `desktop/src-tauri/target/release/bundle/`):
 
@@ -82,4 +93,4 @@ Regenerates `desktop/src-tauri/icons/` from the Real Calendar brand colors.
 
 ## CI
 
-GitHub Actions workflow `.github/workflows/desktop.yml` builds on Ubuntu, macOS, and Windows and uploads installers as artifacts. The **`windows-store`** job produces Store-ready NSIS bundles when `TAURI_SIGNING_PRIVATE_KEY` is configured. Tag `desktop-v*` to run `.github/workflows/desktop-release.yml` (draft release + `latest.json`).
+GitHub Actions `.github/workflows/desktop.yml` builds on push/PR and uploads CI artifacts. Tag `desktop-v*` to run `.github/workflows/desktop-release.yml` (draft GitHub Release + portable zip).

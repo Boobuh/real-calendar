@@ -79,104 +79,74 @@ appstreamcli validate data/io.github.boobuh.real-calendar.metainfo.xml
 - [ ] Sync `metadata.json` version with metainfo `<release>` and `debian/changelog`
 - [ ] `make test && make pack`
 - [ ] Upload zip to EGO
-- [ ] Tag GitHub release with the zip attached
+- [ ] Tag extension release on GitHub with the zip attached
 - [ ] (Optional) Upload `.deb` to PPA or request universe sponsorship
-- [ ] (Optional) Desktop: tag `desktop-v*` and publish Microsoft Store package (see below)
+- [ ] Desktop: `./scripts/release-desktop.sh VERSION` → publish draft GitHub Release
 
 ---
 
-## Microsoft Store (Windows desktop — individual developer)
+## Desktop app (Windows / macOS / Linux) — recommended
 
-The **Tauri desktop app** (`desktop/`) is what you publish to the Microsoft Store — not the GNOME extension.
+The Tauri app in `desktop/` is distributed via **GitHub Releases** — no app store account, no identity verification, no Microsoft Partner Center.
 
-### One-time setup
+### For users
 
-1. **Enroll** at [Microsoft Partner Center](https://partner.microsoft.com/dashboard) as an **Individual** (~$19 one-time).
-2. **New product** → **EXE or MSI app** → reserve the name **Real Calendar**.
-3. **Updater signing keys** (in-app updates + Store requirement):
+Download the latest release:
+
+**https://github.com/Boobuh/real-calendar/releases/latest**
+
+| Platform | Install |
+|----------|---------|
+| **Windows 10+** | `Real Calendar_*-setup.exe` (or `.msi`) |
+| **macOS 10.15+** | `.dmg` |
+| **Linux** | `.AppImage`, `.deb`, or `.rpm` |
+| **Any browser** | `real-calendar-portable.zip` (no install) |
+
+### Maintainer: cut a desktop release
+
+1. Bump `desktop/package.json`, `desktop/src-tauri/Cargo.toml`, and `desktop/src-tauri/tauri.conf.json` version together.
+2. (Once) set up in-app updates:
    ```bash
    ./scripts/setup-updater-keys.sh
    ```
-   Add GitHub secret **`TAURI_SIGNING_PRIVATE_KEY`** with the contents of `desktop/.keys/updater.key`.  
-   The matching public key is already in `desktop/src-tauri/tauri.release.conf.json`.
-4. **Code-signing certificate (Authenticode)** for the Windows installer — required for Store certification. As an individual, use a CA that sells to indie devs (e.g. SSL.com, DigiCert). Install the cert on your Windows build machine or use `signtool` in CI with secrets `WINDOWS_CERTIFICATE` + `WINDOWS_CERTIFICATE_PASSWORD`.
-5. **Privacy policy URL** — use the committed policy:  
-   `https://github.com/Boobuh/real-calendar/blob/main/docs/PRIVACY.md`  
-   (or host the same text on a GitHub Pages site if Partner Center prefers a non-repo URL).
+   Add GitHub secret **`TAURI_SIGNING_PRIVATE_KEY`** with the private key contents.
+3. Commit, push, then tag:
+   ```bash
+   ./scripts/release-desktop.sh 2.0.0
+   ```
+4. Open the **draft** release CI creates → review assets → **Publish release**.
 
-### Build the Store installer
+Workflow: `.github/workflows/desktop-release.yml` (triggered by `desktop-v*` tags).
 
-On **Windows** (Visual Studio Build Tools + WebView2 SDK):
+CI builds all platforms, attaches `latest.json` for the updater (when signing secret is set), and adds `real-calendar-portable.zip`.
+
+### Local build (optional)
 
 ```bash
 cd desktop
 npm ci
-export TAURI_SIGNING_PRIVATE_KEY="$(cat .keys/updater.key)"   # Git Bash / WSL
-npm run build:store
+npm run build:release   # signed updater artifacts if TAURI_SIGNING_PRIVATE_KEY is set
 ```
 
-Outputs in `desktop/src-tauri/target/release/bundle/nsis/`:
+See [desktop/README.md](./desktop/README.md) for dev prerequisites.
 
-| File | Purpose |
-|------|---------|
-| `Real Calendar_*-setup.exe` | Upload to Partner Center |
-| `*-setup.exe.sig` | Updater signature |
-| `*.nsis.zip` | In-app update bundle |
+---
 
-Store-specific settings (merged at build time):
+## Microsoft Store (optional — not recommended)
 
-- `tauri.microsoftstore.conf.json` — offline WebView2 installer, publisher **Boobuh**
-- `tauri.release.conf.json` — updater artifacts + GitHub `latest.json` endpoint
+> **Skip this** unless you explicitly want Microsoft Store distribution and are OK sharing personal identity data with Microsoft (name, address, phone, tax/payment profile for Partner Center enrollment).
 
-**Silent install argument** for Partner Center: `/S` (uppercase S).
+The repo still includes Store-oriented configs (`build:store`, `tauri.microsoftstore.conf.json`) if you change your mind later. They are **not** required for GitHub Releases or in-app updates.
 
-### Sign the installer (Authenticode)
+<details>
+<summary>Legacy Store checklist (collapsed)</summary>
 
-After `npm run build:store`, sign the NSIS exe before upload:
+1. Enroll at [Partner Center](https://partner.microsoft.com/dashboard) as Individual (~$19).
+2. New product → **EXE or MSI app** → **Real Calendar**.
+3. `npm run build:store` on Windows → sign with Authenticode → upload with silent args **`/S`**.
+4. Privacy policy: [docs/PRIVACY.md](./docs/PRIVACY.md).
 
-```powershell
-signtool sign /fd SHA256 /a "desktop\src-tauri\target\release\bundle\nsis\Real Calendar_*-setup.exe"
-```
+See [Tauri Microsoft Store guide](https://v2.tauri.app/distribute/microsoft-store/) for certification details.
 
-Verify:
-
-```powershell
-signtool verify /pa "...\Real Calendar_*-setup.exe"
-```
-
-### Partner Center listing
-
-| Field | Value |
-|-------|--------|
-| Product name | Real Calendar |
-| Publisher display | Boobuh |
-| Category | Utilities & tools |
-| Pricing | Free |
-| Privacy policy | `docs/PRIVACY.md` on GitHub (see above) |
-| Support contact | GitHub Issues URL |
-| Screenshots | 1366×768+ from desktop app |
-
-**Packages** → link or upload the signed `*-setup.exe` → set silent args **`/S`**.
-
-### CI artifacts
-
-Push to `feat/desktop-tauri` or `main` (with `TAURI_SIGNING_PRIVATE_KEY` set):
-
-- **`real-calendar-windows-store`** — Store-ready NSIS + updater signatures
-
-### Tagged desktop releases
-
-```bash
-git tag desktop-v2.0.0
-git push origin desktop-v2.0.0
-```
-
-Workflow `.github/workflows/desktop-release.yml` builds all platforms, generates **`latest.json`** for the updater, and opens a **draft** GitHub Release. Publish the release, then submit the Windows Store artifact from that release to Partner Center.
-
-### Certification tips
-
-- Use **`build:store`** (offline WebView2), not the default embed bootstrapper.
-- Installer must install silently (`/S`).
-- Publisher name **Boobuh** must differ from product name **Real Calendar** (already configured).
-- Review can take several days; respond promptly to certification feedback in Partner Center.
+</details>
 
